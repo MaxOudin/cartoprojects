@@ -4,9 +4,6 @@
 
 import { application } from "./application"
 
-import AddressAutocompleteController from "./address_autocomplete_controller"
-application.register("address-autocomplete", AddressAutocompleteController)
-
 import ClockController from "./clock_controller"
 application.register("clock", ClockController)
 

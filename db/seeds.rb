@@ -8,21 +8,27 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# Create a user
-User.create!(
-  email: 'admin@arko.org',
-  password: 'password',
-  password_confirmation: 'password',
-  first_name: 'Admin',
-  last_name: 'User',
-  nickname: 'Admin Maxime',
-  admin: true
-)
+# Create User
+user = User.create!(email: 'user@example.com', password: 'password', first_name: 'First', last_name: 'Last')
+p "#{user.email} user created"
 
-# Create a monument with a location (name, address, lat, long)
-Monument.create!(
-  name: "Eiffel Tower",
-  address: "Av. Gustave Eiffel, 75007 Paris, France",
-  latitude: "48.8582",
-  longitude: "2.2945"
+# Create Project
+project = Project.create!(name: 'Project in Yaoundé', description: 'A description of the project', user: user)
+p "#{project.name} created"
+
+# Create Country, Region, Commune, District
+country = Country.create!(latitude: 3.8480, longitude: 11.5021)
+region = Region.create!(latitude: 3.8480, longitude: 11.5021)
+commune = Commune.create!(latitude: 3.8480, longitude: 11.5021)
+district = District.create!(latitude: 3.8480, longitude: 11.5021)
+
+# Create ProjectLocation
+zone_project = ZoneProject.create!(
+  country: country,
+  region: region,
+  commune: commune,
+  district: district,
+  project: project,
+  geometry: 'POINT(11.5021 3.8480)'
 )
+p "#{zone_project.project.name} location created"
