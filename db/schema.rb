@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_27_081407) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_27_195919) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -42,11 +43,68 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_27_081407) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "communes", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
+    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "countries", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
+    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "districts", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
+    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "monuments", force: :cascade do |t|
     t.string "name"
     t.string "address"
     t.float "latitude"
     t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "projects", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_projects_on_user_id"
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.float "latitude"
+    t.float "longitude"
+    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
+    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
+    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -67,6 +125,30 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_27_081407) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "zone_projects", force: :cascade do |t|
+    t.bigint "country_id"
+    t.bigint "region_id"
+    t.bigint "commune_id"
+    t.bigint "district_id"
+    t.bigint "project_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.geometry "geometry", limit: {:srid=>0, :type=>"geometry"}
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["commune_id"], name: "index_zone_projects_on_commune_id"
+    t.index ["country_id"], name: "index_zone_projects_on_country_id"
+    t.index ["district_id"], name: "index_zone_projects_on_district_id"
+    t.index ["project_id"], name: "index_zone_projects_on_project_id"
+    t.index ["region_id"], name: "index_zone_projects_on_region_id"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "projects", "users"
+  add_foreign_key "zone_projects", "communes"
+  add_foreign_key "zone_projects", "countries"
+  add_foreign_key "zone_projects", "districts"
+  add_foreign_key "zone_projects", "projects"
+  add_foreign_key "zone_projects", "regions"
 end

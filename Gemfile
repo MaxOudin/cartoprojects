@@ -94,3 +94,6 @@ end
 
 # carto gemmes
 gem "geocoder"
+
+# Postgis adapteur BDD
+gem 'activerecord-postgis-adapter'

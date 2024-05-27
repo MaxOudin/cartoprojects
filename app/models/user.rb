@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   has_one_attached :avatar
   validates :nickname, uniqueness: true
+
+  has_many :projects, dependent: :destroy
 end
