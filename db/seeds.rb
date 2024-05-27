@@ -18,3 +18,5 @@ User.create!(
   nickname: 'Admin Maxime',
   admin: true
 )
+
+

@@ -91,3 +91,6 @@ group :test do
   gem "shoulda-matchers"
   gem 'pundit-matchers', '~> 1.7.0'
 end
+
+# carto gemmes
+gem "geocoder"
