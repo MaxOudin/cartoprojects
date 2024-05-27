@@ -25,4 +25,5 @@ class ApplicationController < ActionController::Base
       verify_authorized
     end
   end
+
 end

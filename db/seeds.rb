@@ -19,4 +19,10 @@ User.create!(
   admin: true
 )
 
-
+# Create a monument with a location (name, address, lat, long)
+Monument.create!(
+  name: "Eiffel Tower",
+  address: "Av. Gustave Eiffel, 75007 Paris, France",
+  latitude: "48.8582",
+  longitude: "2.2945"
+)
