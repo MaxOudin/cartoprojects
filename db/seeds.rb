@@ -13,7 +13,7 @@ user = User.create!(email: 'user@example.com', password: 'password', first_name:
 p "#{user.email} user created"
 
 # Create Project
-project = Project.create!(name: 'Project in Yaoundé', description: 'A description of the project', user: user)
+project = Project.create!(name: 'Project in Yaoundé', description: 'A description of the project in Yaounde', user: user)
 p "#{project.name} created"
 
 # Create Country, Region, Commune, District
