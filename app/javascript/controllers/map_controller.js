@@ -45,7 +45,7 @@ export default class extends Controller {
           'type': 'Feature',
           'geometry': {
             'type': 'Polygon',
-            'coordinates': polygon.coordinates
+            'coordinates': polygon.coordinates // or polygon.coordinates for MultiPolygon ?
           }
         }
       })
@@ -58,7 +58,9 @@ export default class extends Controller {
         'paint': {
           'fill-color': '#FF5A1F',
           'fill-opacity': 0.5
-        }
+        },
+        'minzoom': 0,
+        'maxzoom': 22
       })
 
       this.map.addLayer({
@@ -69,15 +71,20 @@ export default class extends Controller {
         'paint': {
           'line-color': '#000',
           'line-width': 3
-        }
+        },
+        'minzoom': 0,
+        'maxzoom': 22
       })
     })
   }
 
   #fitMapToBounds() {
-    const bounds = new mapboxgl.LngLatBounds()
-    this.markersValue.forEach(marker => bounds.extend([marker.lng, marker.lat]))
-    this.polygonsValue.forEach(polygon => polygon.coordinates[0].forEach(coord => bounds.extend(coord)))
-    this.map.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 0 })
+    const bounds = new mapboxgl.LngLatBounds();
+    this.markersValue.forEach(marker => bounds.extend([marker.lng, marker.lat]));
+    this.polygonsValue.forEach(polygon => {
+      const coordinates = polygon.coordinates.flat(geometryType === 'MultiPolygon' ? 2 : 1);
+      coordinates.forEach(coord => bounds.extend(coord));
+    });
+    this.map.fitBounds(bounds, { padding: 70, maxZoom: 15, duration: 0 });
   }
 }

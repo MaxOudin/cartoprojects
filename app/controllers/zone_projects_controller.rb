@@ -22,20 +22,12 @@ class ZoneProjectsController < ApplicationController
           coordinates: [coordinates]
         }
       when RGeo::Feature::MultiPolygon
-        zone_project.geometry.each do |polygon|
-          coordinates = polygon.exterior_ring.points.map { |point| [point.x, point.y] }
-          @polygons << {
-            id: zone_project.id,
-            coordinates: [coordinates]
-          }
+        multipolygon_coordinates = zone_project.geometry.map do |polygon|
+          polygon.exterior_ring.points.map { |point| [point.x, point.y] }
         end
-      when RGeo::Feature::MultiPoint
-        first_point = zone_project.geometry[0]
-        @markers << {
-          lat: first_point.y,
-          lng: first_point.x,
-          info_window_html: render_to_string(partial: "info_window", locals: { zone_project: zone_project }),
-          marker_html: render_to_string(partial: "marker")
+        @polygons << {
+          id: zone_project.id,
+          coordinates: multipolygon_coordinates
         }
       else
         # Handle other types or log an error

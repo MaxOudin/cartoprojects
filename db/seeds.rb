@@ -73,8 +73,6 @@
 #   region.save
 # end
 
-
-
 require 'rgeo'
 require 'rgeo/geo_json'
 require 'json'
@@ -87,18 +85,6 @@ data = JSON.parse(file)
 # Créer une factory pour générer des objets RGeo
 factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
-# # Extraire la géométrie du premier polygone
-# # geojson_geom = data['features'][0]['geometry'] # Assumant que le polygone est dans la première feature
-
-# # Parse la géométrie GeoJSON pour créer un objet RGeo
-# geom = RGeo::GeoJSON.decode(geojson_geom.to_json, json_parser: :json, geo_factory: factory)
-
-# # Associer l'objet RGeo au modèle ActiveRecord ZoneProject
-# zone_project = ZoneProject.new
-# zone_project.project = Project.find_by(name: "National Mada all Regions")
-# zone_project.geometry = geom
-# zone_project.save
-# p "#{zone_project.project.name} location created"
 
 # Itérer sur chaque région dans les données GeoJSON
 data['features'].each do |mada_region|
@@ -115,8 +101,8 @@ data['features'].each do |mada_region|
 
   # Sauvegarder le ZoneProject
   if zone_project.save
-    puts "ZoneProject saved successfully for region: #{mada_region['properties']['name']}"
+    puts "ZoneProject saved successfully for region: #{mada_region['properties']["ADM1_EN"]}"
   else
-    puts "Failed to save ZoneProject for region: #{mada_region['properties']['name']}"
+    puts "Failed to save ZoneProject for region: #{mada_region['properties']["ADM1_EN"]}"
   end
 end
