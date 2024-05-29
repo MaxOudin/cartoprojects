@@ -4,4 +4,6 @@ class ZoneProject < ApplicationRecord
   belongs_to :commune, optional: true
   belongs_to :district, optional: true
   belongs_to :project, optional: true
+
+  validates :geometry, presence: true
 end

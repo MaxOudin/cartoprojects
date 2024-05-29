@@ -92,8 +92,10 @@ group :test do
   gem 'pundit-matchers', '~> 1.7.0'
 end
 
-# carto gemmes
-gem "geocoder"
+# Carto gemmes
+gem "geocoder" # Geocoder is a complete geocoding solution for Ruby. Non utilisé (29/05/2024)
+gem 'rgeo' # RGeo is a geospatial data library for Ruby
+gem 'rgeo-geojson' # RGeo::GeoJSON adds GeoJSON encoding and decoding to RGeo
 
 # Postgis adapteur BDD
 gem 'activerecord-postgis-adapter'
