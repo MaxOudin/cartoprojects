@@ -73,6 +73,40 @@
 #   region.save
 # end
 
+# require 'rgeo'
+# require 'rgeo/geo_json'
+# require 'json'
+
+# # Lire le fichier JSON
+# file_r = File.open('db/seeds/madagascar/geo_data/region_mgas_ms_l10.json')
+# file = file_r.read
+# data = JSON.parse(file)
+
+# # Créer une factory pour générer des objets RGeo
+# factory = RGeo::Geographic.spherical_factory(srid: 4326)
+
+
+# # Itérer sur chaque région dans les données GeoJSON
+# data['features'].each do |mada_region|
+#   # Extraire la géométrie de la région
+#   geojson_geom = mada_region['geometry']
+
+#   # Parse la géométrie GeoJSON pour créer un objet RGeo
+#   geom = RGeo::GeoJSON.decode(geojson_geom.to_json, json_parser: :json, geo_factory: factory)
+
+#   # Associer l'objet RGeo au modèle ActiveRecord ZoneProject
+#   zone_project = ZoneProject.new
+#   zone_project.project = Project.find_by(name: "National Mada all Regions")
+#   zone_project.geometry = geom
+
+#   # Sauvegarder le ZoneProject
+#   if zone_project.save
+#     puts "ZoneProject saved successfully for region: #{mada_region['properties']["ADM1_EN"]}"
+#   else
+#     puts "Failed to save ZoneProject for region: #{mada_region['properties']["ADM1_EN"]}"
+#   end
+# end
+
 require 'rgeo'
 require 'rgeo/geo_json'
 require 'json'
@@ -85,6 +119,8 @@ data = JSON.parse(file)
 # Créer une factory pour générer des objets RGeo
 factory = RGeo::Geographic.spherical_factory(srid: 4326)
 
+# Créer un pays Madagascar
+mada_country = Country.find_by(name: "Madagascar") || Country.create(name: "Madagascar", code: "MDG", iso_code: "450")
 
 # Itérer sur chaque région dans les données GeoJSON
 data['features'].each do |mada_region|
@@ -95,14 +131,19 @@ data['features'].each do |mada_region|
   geom = RGeo::GeoJSON.decode(geojson_geom.to_json, json_parser: :json, geo_factory: factory)
 
   # Associer l'objet RGeo au modèle ActiveRecord ZoneProject
-  zone_project = ZoneProject.new
-  zone_project.project = Project.find_by(name: "National Mada all Regions")
-  zone_project.geometry = geom
+  region = Region.new
+  region.borders = geom
+  region.name = mada_region['properties']["ADM1_EN"]
+  region.code = mada_region['properties']["ADM1_PCODE"]
+  region.longitude = mada_region['properties']["cent_X"]
+  region.latitude = mada_region['properties']["cent_Y"]
+  region.country = mada_country
 
   # Sauvegarder le ZoneProject
-  if zone_project.save
+  if region.save
     puts "ZoneProject saved successfully for region: #{mada_region['properties']["ADM1_EN"]}"
   else
     puts "Failed to save ZoneProject for region: #{mada_region['properties']["ADM1_EN"]}"
   end
 end
+

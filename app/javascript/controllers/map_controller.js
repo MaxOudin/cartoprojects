@@ -75,6 +75,10 @@ export default class extends Controller {
         'minzoom': 0,
         'maxzoom': 22
       })
+
+      this.map.addControl({
+        
+      })
     })
   }
 

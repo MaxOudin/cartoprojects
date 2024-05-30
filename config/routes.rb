@@ -11,5 +11,5 @@ Rails.application.routes.draw do
   # root "posts#index"
 
   resources :monuments
-  get 'map', to: 'zone_projects#index', as: 'map'
+  get 'map', to: 'regions#index', as: 'map'
 end

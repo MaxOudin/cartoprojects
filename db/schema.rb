@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_27_195919) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_30_135358) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "postgis"
@@ -58,13 +58,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_27_195919) do
   create_table "countries", force: :cascade do |t|
     t.float "latitude"
     t.float "longitude"
-    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
-    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
-    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
-    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
-    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "iso_code"
+    t.string "code"
+    t.bigint "continent_id"
+    t.geometry "borders", limit: {:srid=>0, :type=>"geometry"}
+    t.geography "hi_point", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.geography "low_point", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.index ["continent_id"], name: "index_countries_on_continent_id"
   end
 
   create_table "districts", force: :cascade do |t|
@@ -100,13 +103,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_27_195919) do
   create_table "regions", force: :cascade do |t|
     t.float "latitude"
     t.float "longitude"
-    t.geometry "shape1", limit: {:srid=>0, :type=>"geometry"}
-    t.geometry "shape2", limit: {:srid=>0, :type=>"geometry"}
-    t.geometry "path", limit: {:srid=>3785, :type=>"line_string"}
-    t.geography "lonlat", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
-    t.geography "lonlatheight", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "code"
+    t.bigint "country_id"
+    t.geometry "borders", limit: {:srid=>0, :type=>"geometry"}
+    t.geography "hi_point", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.geography "low_point", limit: {:srid=>4326, :type=>"st_point", :has_z=>true, :geographic=>true}
+    t.index ["country_id"], name: "index_regions_on_country_id"
   end
 
   create_table "users", force: :cascade do |t|
