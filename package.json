@@ -5,6 +5,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.4",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.2",
     "autoprefixer": "^10.4.19",
     "chokidar": "^3.6.0",
     "esbuild": "^0.21.4",

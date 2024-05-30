@@ -96,7 +96,7 @@ group :test do
 end
 
 # Carto gemmes
-gem "geocoder" # Geocoder is a complete geocoding solution for Ruby. Non utilisé (29/05/2024)
+gem "geocoder" # Geocoder is a complete geocoding solution for Ruby
 gem 'rgeo' # RGeo is a geospatial data library for Ruby
 gem 'rgeo-geojson' # RGeo::GeoJSON adds GeoJSON encoding and decoding to RGeo
 
